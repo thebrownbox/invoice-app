@@ -34,6 +34,14 @@ export class AppService {
       phone: createInvoiceDto.customer.phone,
     };
 
+    // Company details
+    const company = {
+      name: createInvoiceDto.company.name,
+      address: createInvoiceDto.company.address,
+      email: createInvoiceDto.company.email,
+      phone: createInvoiceDto.company.phone,
+    };
+
     // Generate invoice table rows from createInvoiceDto.items
     const invoiceItems = createInvoiceDto.items || [];
     const tableBody = [
@@ -111,6 +119,27 @@ export class AppService {
                 margin: [0, 0, 0, 20],
               },
             ]
+          : []),
+
+        {
+          text: 'From:',
+          bold: true,
+          margin: [0, 30, 0, 10],
+        },
+        {
+          text: company.name,
+          margin: [0, 0, 0, 5],
+        },
+        {
+          text: company.address,
+          margin: [0, 0, 0, 5],
+        },
+        {
+          text: company.email,
+          margin: [0, 0, 0, 5],
+        },
+        ...(company.phone
+          ? [{ text: company.phone, margin: [0, 0, 0, 0] }]
           : []),
         {
           text: 'Thank you for your business!',

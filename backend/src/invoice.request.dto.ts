@@ -41,7 +41,28 @@ export class InvoiceCustomerDto {
   phone?: string;
 }
 
+export class InvoiceCompanyDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsOptional()
+  phone?: string;
+}
+
 export class CreateInvoiceDto {
+  @ValidateNested()
+  @Type(() => InvoiceCompanyDto)
+  company: InvoiceCompanyDto;
+
   @ValidateNested()
   @Type(() => InvoiceCustomerDto)
   customer: InvoiceCustomerDto;
@@ -67,6 +88,12 @@ export class CreateInvoiceDto {
 // Example payload for CreateInvoiceDto
 export const exampleCreateInvoicePayloadJson: string = JSON.stringify(
   {
+    company: {
+      name: 'Your Company',
+      address: '123 Business St, City, State 12345',
+      email: 'contact@yourcompany.com',
+      phone: '+1 (555) 123-4567',
+    },
     customer: {
       name: 'John Doe',
       address: '123 Main St, Springfield, USA',

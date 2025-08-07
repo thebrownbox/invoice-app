@@ -20,7 +20,15 @@ export interface InvoiceCustomerDto {
   phone?: string;
 }
 
+export interface InvoiceCompanyDto {
+  name: string;
+  address: string;
+  email: string;
+  phone?: string;
+}
+
 export interface CreateInvoiceDto {
+  company: InvoiceCompanyDto;
   customer: InvoiceCustomerDto;
   items: InvoiceItemDto[];
   invoiceNumber?: string;

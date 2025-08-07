@@ -23,6 +23,12 @@ export const PreviewComponent = () => {
     try {
       // Transform frontend data to match CreateInvoiceDto structure
       const createInvoicePayload: CreateInvoiceDto = {
+        company: {
+          name: settings.companyName,
+          address: settings.companyAddress,
+          email: settings.companyEmail,
+          phone: settings.companyPhone,
+        },
         customer: {
           name: settings.client.name,
           address: settings.client.address,
@@ -36,7 +42,6 @@ export const PreviewComponent = () => {
         })),
         invoiceNumber: settings.invoiceNumber,
         date: settings.date,
-        notes: 'Thank you for your business!',
       };
 
       console.log('Sending invoice data to backend:', createInvoicePayload);
@@ -149,6 +154,17 @@ export const PreviewComponent = () => {
                 <div></div>
                 <div></div>
                 <div className="text-right">{formatCurrency(total)}</div>
+              </div>
+            </div>
+
+            {/* Company Info */}
+            <div className="mt-8 mb-6">
+              <h3 className="font-semibold text-lg text-primary mb-3">From (Company):</h3>
+              <div className="space-y-1 text-sm">
+                <p><strong>Name:</strong> {settings.companyName}</p>
+                <p><strong>Address:</strong> {settings.companyAddress}</p>
+                <p><strong>Email:</strong> {settings.companyEmail}</p>
+                <p><strong>Phone Number:</strong> {settings.companyPhone}</p>
               </div>
             </div>
 
