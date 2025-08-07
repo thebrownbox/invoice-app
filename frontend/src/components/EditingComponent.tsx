@@ -2,12 +2,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Trash2 } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Plus, Trash2, User, Mail, MapPin, Phone, ChevronDown, ChevronUp } from 'lucide-react';
 import { useInvoice } from '@/contexts/InvoiceContext';
 
 export const EditingComponent = () => {
-  const { items, addItem, updateItem, deleteItem, getTotalAmount, settings } = useInvoice();
+  const { items, addItem, updateItem, deleteItem, getTotalAmount, settings, setSettings } = useInvoice();
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
+  const [isCustomerInfoOpen, setIsCustomerInfoOpen] = React.useState(true);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -16,12 +18,99 @@ export const EditingComponent = () => {
     }).format(amount);
   };
 
+  const updateClient = (field: keyof typeof settings.client, value: string) => {
+    setSettings({
+      ...settings,
+      client: {
+        ...settings.client,
+        [field]: value
+      }
+    });
+  };
+
   const subtotal = getTotalAmount();
   const tax = subtotal * (settings.taxRate / 100);
   const total = subtotal + tax;
 
   return (
     <div className="h-full flex flex-col p-6 space-y-6">
+      {/* Customer Information Section */}
+      <Collapsible open={isCustomerInfoOpen} onOpenChange={setIsCustomerInfoOpen}>
+        <Card className="gradient-card shadow-medium border-0">
+          <CardHeader className="pb-3">
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" className="w-full p-0 h-auto justify-between hover:bg-transparent">
+                <CardTitle className="text-xl font-semibold text-primary flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Customer Information
+                </CardTitle>
+                {isCustomerInfoOpen ? (
+                  <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                )}
+              </Button>
+            </CollapsibleTrigger>
+          </CardHeader>
+          <CollapsibleContent>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground">Customer Name</label>
+                  <Input
+                    value={settings.client.name}
+                    onChange={(e) => updateClient('name', e.target.value)}
+                    placeholder="Enter customer name"
+                    className="border-0 bg-background/50 focus:bg-background shadow-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Address
+                  </label>
+                  <Input
+                    value={settings.client.address}
+                    onChange={(e) => updateClient('address', e.target.value)}
+                    placeholder="Enter customer address"
+                    className="border-0 bg-background/50 focus:bg-background shadow-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    value={settings.client.email}
+                    onChange={(e) => updateClient('email', e.target.value)}
+                    placeholder="Enter customer email"
+                    className="border-0 bg-background/50 focus:bg-background shadow-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    Phone Number
+                  </label>
+                  <Input
+                    type="tel"
+                    value={settings.client.phone}
+                    onChange={(e) => updateClient('phone', e.target.value)}
+                    placeholder="Enter customer phone number"
+                    className="border-0 bg-background/50 focus:bg-background shadow-none"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
+
       {/* Summary Section */}
       <Card className="gradient-card shadow-medium border-0">
         <CardHeader>
@@ -64,7 +153,7 @@ export const EditingComponent = () => {
             <div className="col-span-2">Total</div>
             <div className="col-span-1"></div>
           </div>
-          
+
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {items.map((item) => (
               <div
@@ -81,7 +170,7 @@ export const EditingComponent = () => {
                     className="border-0 bg-transparent focus:bg-background shadow-none"
                   />
                 </div>
-                
+
                 <div className="col-span-3">
                   <Input
                     type="number"
@@ -93,7 +182,7 @@ export const EditingComponent = () => {
                     className="border-0 bg-transparent focus:bg-background shadow-none"
                   />
                 </div>
-                
+
                 <div className="col-span-2">
                   <Input
                     type="number"
@@ -104,11 +193,11 @@ export const EditingComponent = () => {
                     className="border-0 bg-transparent focus:bg-background shadow-none"
                   />
                 </div>
-                
+
                 <div className="col-span-2 font-semibold text-primary">
                   {formatCurrency(item.total)}
                 </div>
-                
+
                 <div className="col-span-1 flex justify-center">
                   {hoveredItem === item.id && items.length > 1 && (
                     <Button
