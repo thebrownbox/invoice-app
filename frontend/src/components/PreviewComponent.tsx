@@ -80,7 +80,13 @@ export const PreviewComponent = () => {
             <FileText className="h-5 w-5" />
             Invoice Preview
           </h2>
-          <Button onClick={handleExport} variant="premium" size="sm" className="gap-2">
+          <Button
+            onClick={handleExport}
+            variant="premium"
+            size="sm"
+            className="gap-2"
+            disabled={items.length === 0}
+          >
             <Download className="h-4 w-4" />
             Export PDF
           </Button>

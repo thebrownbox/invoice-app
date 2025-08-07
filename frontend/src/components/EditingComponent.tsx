@@ -3,11 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Plus, Trash2, User, Mail, MapPin, Phone, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, User, Mail, MapPin, Phone, ChevronDown, ChevronUp, Trash } from 'lucide-react';
 import { useInvoice } from '@/contexts/InvoiceContext';
 
 export const EditingComponent = () => {
-  const { items, addItem, updateItem, deleteItem, getTotalAmount, settings, setSettings } = useInvoice();
+  const { items, addItem, updateItem, deleteItem, getTotalAmount, settings, setSettings, setItems } = useInvoice();
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
   const [isCustomerInfoOpen, setIsCustomerInfoOpen] = React.useState(true);
 
@@ -26,6 +26,10 @@ export const EditingComponent = () => {
         [field]: value
       }
     });
+  };
+
+  const clearAllItems = () => {
+    setItems([]);
   };
 
   const subtotal = getTotalAmount();
@@ -111,39 +115,26 @@ export const EditingComponent = () => {
         </Card>
       </Collapsible>
 
-      {/* Summary Section */}
-      <Card className="shadow-medium border-0 bg-card">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-primary">Invoice Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Subtotal:</span>
-              <span className="font-medium">{formatCurrency(subtotal)}</span>
-            </div>
-            {settings.taxRate > 0 && (
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Tax ({settings.taxRate}%):</span>
-                <span className="font-medium">{formatCurrency(tax)}</span>
-              </div>
-            )}
-            <div className="flex justify-between items-center text-lg font-semibold text-primary border-t pt-3">
-              <span>Total:</span>
-              <span>{formatCurrency(total)}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Items List Section */}
       <Card className="flex-1 shadow-medium border-0 bg-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl font-semibold text-primary">Invoice Items</CardTitle>
-          <Button onClick={addItem} variant="hero" size="sm" className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add Item
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={addItem} variant="hero" size="sm" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Item
+            </Button>
+            <Button
+              onClick={clearAllItems}
+              variant="outline"
+              size="sm"
+              className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+              disabled={items.length === 0}
+            >
+              <Trash className="h-4 w-4" />
+              Clear All
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-12 gap-3 text-sm font-medium text-muted-foreground border-b pb-2">
@@ -213,6 +204,26 @@ export const EditingComponent = () => {
               </div>
             ))}
           </div>
+
+          {/* Total Section */}
+          {items.length > 0 && (
+            <div className="border-t pt-4 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Subtotal:</span>
+                <span className="font-medium">{formatCurrency(subtotal)}</span>
+              </div>
+              {settings.taxRate > 0 && (
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Tax ({settings.taxRate}%):</span>
+                  <span className="font-medium">{formatCurrency(tax)}</span>
+                </div>
+              )}
+              <div className="flex justify-between items-center text-lg font-semibold text-primary border-t pt-2">
+                <span>Total:</span>
+                <span>{formatCurrency(total)}</span>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
