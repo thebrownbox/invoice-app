@@ -86,7 +86,7 @@ export const PreviewComponent = () => {
           </Button>
         </div>
 
-        <Card className="gradient-card shadow-large border-0">
+        <Card className="shadow-large border-0 bg-card">
           <CardContent className="p-8 space-y-8">
             {/* Header with INVOICE title */}
             <div className="text-center mb-8">

@@ -36,7 +36,7 @@ export const EditingComponent = () => {
     <div className="h-full flex flex-col p-6 space-y-6">
       {/* Customer Information Section */}
       <Collapsible open={isCustomerInfoOpen} onOpenChange={setIsCustomerInfoOpen}>
-        <Card className="gradient-card shadow-medium border-0">
+        <Card className="shadow-medium border-0 bg-card">
           <CardHeader className="pb-3">
             <CollapsibleTrigger asChild>
               <Button variant="ghost" className="w-full p-0 h-auto justify-between hover:bg-transparent">
@@ -112,7 +112,7 @@ export const EditingComponent = () => {
       </Collapsible>
 
       {/* Summary Section */}
-      <Card className="gradient-card shadow-medium border-0">
+      <Card className="shadow-medium border-0 bg-card">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-primary">Invoice Summary</CardTitle>
         </CardHeader>
@@ -137,7 +137,7 @@ export const EditingComponent = () => {
       </Card>
 
       {/* Items List Section */}
-      <Card className="flex-1 gradient-card shadow-medium border-0">
+      <Card className="flex-1 shadow-medium border-0 bg-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl font-semibold text-primary">Invoice Items</CardTitle>
           <Button onClick={addItem} variant="hero" size="sm" className="gap-2">
