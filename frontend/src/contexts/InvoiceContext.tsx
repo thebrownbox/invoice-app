@@ -22,7 +22,15 @@ const defaultSettings: InvoiceSettings = {
   companyEmail: 'contact@yourcompany.com',
   companyPhone: '+1 (555) 123-4567',
   currency: 'USD',
-  taxRate: 0
+  taxRate: 0,
+  client: {
+    name: 'John Doe',
+    address: '123 Main St, Springfield, USA',
+    email: 'john.doe@example.com',
+    phone: '+1 555-1234'
+  },
+  invoiceNumber: '0001',
+  date: new Date().toISOString().split('T')[0]
 };
 
 export const InvoiceProvider = ({ children }: { children: ReactNode }) => {
@@ -30,10 +38,17 @@ export const InvoiceProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<InvoiceItem[]>([
     {
       id: '1',
-      name: 'Sample Item',
-      price: 100,
+      name: 'Widget A',
+      price: 10,
+      qty: 2,
+      total: 20
+    },
+    {
+      id: '2',
+      name: 'Widget B',
+      price: 15,
       qty: 1,
-      total: 100
+      total: 15
     }
   ]);
   const [settings, setSettings] = useState<InvoiceSettings>(defaultSettings);

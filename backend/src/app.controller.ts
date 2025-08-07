@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Body } from '@nestjs/common';
+import { Controller, Get, Res, Body, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import * as html_to_pdf from 'html-pdf-node';
@@ -8,7 +8,7 @@ import { CreateInvoiceDto } from './invoice.request.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Post('invoice')
   async getInvoice(
     @Body() createInvoiceDto: CreateInvoiceDto,
     @Res() res: Response,
